@@ -1,0 +1,303 @@
+<html>
+
+<head>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+
+ <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-firestore.js"></script>
+ 
+ <script>
+ 
+   //Loading first 20 movies on start up
+	
+  // My web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDefPJ6_QTLJxGDtYl3VmoppEoKgMJOuVE",
+    authDomain: "movie-database-6e205.firebaseapp.com",
+    projectId: "movie-database-6e205",
+  };
+  
+  	var lastDoc;
+	var firstDoc;
+	var doc;
+
+	
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  
+  var db = firebase.firestore();
+	var collectionReference = db.collection("shows");
+	
+
+    var first = collectionReference
+        .orderBy("imdb_id")
+        .limit(12);
+		
+
+
+	 first.get().then(function (documentSnapshots) {
+	  // Get the last visible document
+	   lastDoc = documentSnapshots.docs[documentSnapshots.docs.length-1];
+	   
+	});
+
+
+	loadReference(first);
+	
+	
+	$(document).ready(function(){
+
+	$("#loadNext").click(function(){
+
+			
+			  var  next = collectionReference
+					  .orderBy("imdb_id")
+					  .startAfter(lastDoc)
+					  .limit(12);
+			 next.get().then(function (documentSnapshots) {
+				// Get the last visible document
+				//firstDoc = lastDoc;
+				lastDoc = documentSnapshots.docs[documentSnapshots.docs.length-1];
+				firstDoc = documentSnapshots.docs[0];
+
+			});
+			
+			 loadReference(next);					
+		});
+		
+		
+		
+		$("#loadPrevious").click(function(){		
+			
+			if(firstDoc == null || (firstDoc != null && firstDoc.data().imdb_id == 'tt0004972')){
+				alert("No More Previous Movies");
+				return;
+			}
+				
+			var previous = collectionReference.where("imdb_id", "<", firstDoc.data().imdb_id).orderBy("imdb_id", "desc").limit(12);
+
+				 previous.get().then(function (documentSnapshots) {
+				 
+					$("#out").empty();
+					
+					for(var i = documentSnapshots.docs.length-1; i >=0; i--){
+					
+						loadDocument(documentSnapshots.docs[i]);
+					}
+
+					// Get the last visible document
+					firstDoc = documentSnapshots.docs[documentSnapshots.docs.length-1];
+					lastDoc = documentSnapshots.docs[0];
+					
+	
+			}).catch(function(error) {
+				alert("No Previous Movies, Refresh page or click next");
+			});
+
+
+
+
+								
+		});
+		
+		
+
+
+		
+		//Search Based on imdb_id or movie title
+	$(function(){	
+		var timeout = null
+		$( "#searchText" ).keyup(function() {
+			var text = this.value;
+			if(text.length <=0)
+				return;
+			var searchText = text.toLowerCase();
+			clearTimeout(timeout)
+			timeout = setTimeout(function() {
+			var document = null;
+			var docRef =  collectionReference.doc(searchText);
+			var counter = 0;
+			docRef.get().then(function(doc) {
+				if (doc.exists) {
+					$("#out").empty();
+					loadDocument(doc);
+				} else {
+				
+					var promise =  collectionReference.where("title", ">=", searchText).limit(12);
+					promise.get()
+					.then( function(querySnapshot) {
+						$("#out").empty();
+						 querySnapshot.forEach(function(doc) {
+							loadDocument(doc);
+							counter++;							
+						});
+						if(counter == 0)	
+							alert("No such movie");
+
+					})
+					.catch(function(error) {
+						console.log("Error getting documents: ", error);
+					});
+						
+						
+				}
+			  }).catch(function(error) {
+				console.log("Error getting document:", error);
+			 });				
+			}, 100)
+		});
+	 });
+
+
+
+	});
+	
+	
+	
+	//Loads Documents and renders HTML
+	function loadReference(reference){
+		$("#out").empty();
+		reference.get().then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					loadDocument(doc);
+				});
+			 });
+		
+	}
+	//END
+	
+	function loadDocument(doc){
+		var html = '<div class = "col-1 col-sm-2 col-md-4 col-lg-3 col-xl-3" style="padding-top:10px;"> <div class="card" style="width: 18rem;"> <img class="card-img-top"   style="height: 180px; width: 100%; display: block;" src='+doc.data().images.banner+'> <div class="card-body"> <h5 class="card-title">'+doc.data().title.toUpperCase()+'</h5> <p class="card-text">'+doc.data().synopsis.substring(0,120)+'</p><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#openMoreInfo"  data-movieid='+doc.data().imdb_id+'> More Info </button></div></div></div>';
+		 $("#out").append(html);
+	}
+
+
+	$(document).ready(function(){
+		$('#openMoreInfo').on('show.bs.modal', function (event) {
+		  var button = $(event.relatedTarget); // Button that triggered the modal
+		  var modal = $(this);
+		  modal.find('.modal-title').text("");
+		  modal.find('.modal-body').text("");
+		  $("#img").attr("src","");
+		  $("#downloadLinks").empty();
+		  var movieData = button.data('movieid');
+		  var docRef = collectionReference.doc(movieData);
+			
+			docRef.get().then(function(doc) {
+				if (doc.exists) {
+					var trailer = doc.data().trailer;
+					if(trailer != null){
+						$("#youtubeIframe").show();
+						$("#youtubeIframe").attr("src",doc.data().trailer.scheme+":"+doc.data().trailer.schemeSpecificPart);
+					}
+					else
+						$("#youtubeIframe").hide();
+						
+					modal.find('.modal-title').text("Movie Info - "+doc.data().title.toUpperCase());
+					
+					modal.find('.modal-year').text("Year - "+doc.data().year);
+				
+					modal.find('.modal-body').text("Description - "+doc.data().synopsis);
+					var torrents = doc.data().torrents.en;
+					$.each(torrents, function(key, value) {
+						var torrent = "<hr><img src='C:/Users/vinod.gangadhariah/Desktop/images.png' height = '40' width ='40' class = 'img-responsive'/> <b>&nbsp;&nbsp;&nbsp; File Quality : "+key+"   | File Size : "+value.filesize+"   | Seeds : "+value.seed+"   | Peers : "+value.peer+ "   |  Provider : "+value.provider+" &nbsp;&nbsp;&nbsp;  <a href="+value.url+" class='btn btn-warning'>Download Magnet</a>    </b><br/><br/>";
+						$("#downloadLinks").append(torrent);
+					});
+				} else {
+					// doc.data() will be undefined in this case
+					alert("No such Movie!");
+				}
+			}).catch(function(error) {
+				alert("Error getting Movie:", error);
+				console.log(error);
+			});
+
+	});
+ });
+
+</script>
+</head>
+
+
+
+<body>
+
+<div class="container-fluid" style="padding-top:15px;">
+	<nav class="navbar navbar-light bg-light justify-content-between">
+
+	<div>
+		<button type="button"  id="loadPrevious" class="btn btn-warning">Previous</button>
+	</div>
+
+	
+	<h2 style="text-align:center;"  id="nav" onclick = "javascript:location.reload();"><a href="#">Movie Database</a></h2>
+	
+		
+	<div >
+	 <button type="button"  id="loadNext" class="btn btn-warning">Next</button>
+	</div>
+	  <form class="form-inline">
+
+		<input class="form-control mr-sm-2" id="searchText" type="search" placeholder="imdb_id/movie name" aria-label="Search">
+	  </form>
+	</nav>
+	
+
+	
+	
+
+<br/>
+<br/>
+<br/>
+
+		<div class="row" id = "out">
+		</div>
+	
+
+
+<!-- Modal -->
+<div class="modal fade" id="openMoreInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog" role="document" style = " display: table; !important">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="movieTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+	  
+	<iframe id = "youtubeIframe" style="padding:4px;" width="640" height="360" src=""> </iframe>
+	
+	 <div  class="modal-year" style="padding-left:15px; padding-top:10px; word-wrap: break-word;">
+      </div>
+      <div  class="modal-body" style="word-wrap: break-word;">
+      </div>
+	  
+	  <!-- Magnet Links Start-->
+	  <div id="downloadLinks" style = "padding:8px;">	
+			
+	  </div>
+	  <!-- Magnet Links End-->
+
+
+    </div>
+  </div>
+</div>
+
+	
+</div>
+
+</body>
+</html>
