@@ -200,7 +200,7 @@
 					var trailer = doc.data().trailer;
 					if(trailer != null){
 						$("#youtubeIframe").show();
-						$("#youtubeIframe").attr("src",doc.data().trailer.scheme+":"+doc.data().trailer.schemeSpecificPart.replace('watch?v=','embed/'));
+						$("#youtubeIframe").attr("src",doc.data().trailer.scheme+"s:"+doc.data().trailer.schemeSpecificPart.replace('watch?v=','embed/'));
 					}
 					else
 						$("#youtubeIframe").hide();
