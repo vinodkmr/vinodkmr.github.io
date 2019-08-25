@@ -179,7 +179,7 @@
 	//END
 	
 	function loadDocument(doc){
-		var html = '<div class = "col-1 col-sm-2 col-md-4 col-lg-3 col-xl-3" style="padding-top:10px;"> <div class="card" style="width: 18rem;"> <img class="card-img-top"   style="height: 180px; width: 100%; display: block;" src='+doc.data().images.banner+'> <div class="card-body"> <h5 class="card-title">'+doc.data().title.toUpperCase()+'</h5> <p class="card-text">'+doc.data().synopsis.substring(0,120)+'</p><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#openMoreInfo"  data-movieid='+doc.data().imdb_id+'> More Info </button></div></div></div>';
+		var html = '<div class = "col-1 col-sm-2 col-md-4 col-lg-3 col-xl-3" style="padding-top:10px;"> <div class="card" style="width: 18rem;"> <img class="card-img-top"   style="height: 100%; width: 100%; display: block;" src='+doc.data().images.banner+'> <div class="card-body"> <h5 class="card-title">'+doc.data().title.toUpperCase()+'</h5> <p class="card-text">'+doc.data().synopsis.substring(0,120)+'</p><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#openMoreInfo"  data-movieid='+doc.data().imdb_id+'> More Info </button></div></div></div>';
 		 $("#out").append(html);
 	}
 
@@ -200,7 +200,7 @@
 					var trailer = doc.data().trailer;
 					if(trailer != null){
 						$("#youtubeIframe").show();
-						$("#youtubeIframe").attr("src",doc.data().trailer.scheme+":"+doc.data().trailer.schemeSpecificPart);
+						$("#youtubeIframe").attr("src",doc.data().trailer.scheme+":"+doc.data().trailer.schemeSpecificPart.replace('watch?v=','embed/'));
 					}
 					else
 						$("#youtubeIframe").hide();
@@ -225,6 +225,13 @@
 			});
 
 	});
+	
+	$("#openMoreInfo").on("hidden.bs.modal", function () {
+				$("#youtubeIframe").attr("src","");
+				
+		});
+
+
  });
 
 </script>
@@ -237,14 +244,14 @@
 <div class="container-fluid" style="padding-top:15px;">
 	<nav class="navbar navbar-light bg-light justify-content-between">
 
-	<div>
-		<button type="button"  id="loadPrevious" class="btn btn-warning">Previous</button>
-	</div>
 
 	
 	<h2 style="text-align:center;"  id="nav" onclick = "javascript:location.reload();"><a href="#">Movie Database</a></h2>
 	
 		
+	<div>
+		<button type="button"  id="loadPrevious" class="btn btn-warning">Previous</button>
+	</div>
 	<div >
 	 <button type="button"  id="loadNext" class="btn btn-warning">Next</button>
 	</div>
@@ -278,7 +285,7 @@
         </button>
       </div>
 	  
-	<iframe id = "youtubeIframe" style="padding:4px;" width="640" height="360" src=""> </iframe>
+	<iframe id = "youtubeIframe" width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 	
 	 <div  class="modal-year" style="padding-left:15px; padding-top:10px; word-wrap: break-word;">
       </div>
