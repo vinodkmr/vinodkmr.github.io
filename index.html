@@ -212,7 +212,7 @@
 					modal.find('.modal-body').text("Description - "+doc.data().synopsis);
 					var torrents = doc.data().torrents.en;
 					$.each(torrents, function(key, value) {
-						var torrent = "<hr><img src='C:/Users/vinod.gangadhariah/Desktop/images.png' height = '40' width ='40' class = 'img-responsive'/> <b>&nbsp;&nbsp;&nbsp; File Quality : "+key+"   | File Size : "+value.filesize+"   | Seeds : "+value.seed+"   | Peers : "+value.peer+ "   |  Provider : "+value.provider+" &nbsp;&nbsp;&nbsp;  <a href="+value.url+" class='btn btn-warning'>Download Magnet</a>    </b><br/><br/>";
+						var torrent = "<hr><img src='https://cf2.vuze.com/img/magnetic-link-2.png' height = '40' width ='40' class = 'img-responsive'/> <b>&nbsp;&nbsp;&nbsp; File Quality : "+key+"   | File Size : "+value.filesize+"   | Seeds : "+value.seed+"   | Peers : "+value.peer+ "   |  Provider : "+value.provider+" &nbsp;&nbsp;&nbsp;  <a href="+value.url+" class='btn btn-warning'>Download Magnet</a>    </b><br/><br/>";
 						$("#downloadLinks").append(torrent);
 					});
 				} else {
