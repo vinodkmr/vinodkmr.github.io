@@ -44,7 +44,7 @@ function generateLink(){
 	var url = 'https://vinodkmr.github.io/diwali_wish.html?from='+$("#from").val()+'&to='+$("#to").val();
 	$("#url").val(url);
 	console.log("url "+url);
-	$("#share").attr("href","whatsapp://send?text="+url);
+	$("#share").attr("href","whatsapp://send?text="+encodeURI(url));
 	
 }
 
