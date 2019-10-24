@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+function $_GET(param) {
+	var vars = {};
+	window.location.href.replace( location.hash, '' ).replace( 
+		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+		function( m, key, value ) { // callback
+			vars[key] = value !== undefined ? value : '';
+		}
+	);
+
+	if ( param ) {
+		return vars[param] ? vars[param] : null;	
+	}
+	return vars;
+}
+
+var name = $_GET('name');
+</script>
+<style>
+.blinking
+{
+ font-size:30px;
+ color:#f5aa42;
+ font-weight:bold;
+ animation: blink 1.5s infinite;	
+}
+@keyframes blink 
+{  
+ 0% { opacity: 1.0; }
+ 50% { opacity: 0.0; }
+ 100% { opacity: 1.0; }
+}
+</style>
+
+<body style="background-color:black;">
+<div class="container">
+ <div class="row">
+	  <div class="col-12 col-lg-6">
+		<img src = "fireworks.gif" class="img-fluid"/>
+	  </div>
+	  <div class = "col-12 col-lg-6">
+		<img src = "fireworks.gif" class="img-fluid" />
+	  </div>	  
+ </div>
+ 
+ <br/>
+ 
+ 
+ 
+ 
+		<div class="card text-center">
+			  <div class="card-header" style="background-color:#222211; color:#f5aa42;">
+				<h3 class="blinking">WISHES FROM YOGESH! <br/>
+				HAPPY DIWALI PRAKYATH!</h3>
+			  </div>
+		  <div class="card-body">
+		  <div class="row">
+		  
+				<div class="col-12 col-lg-6">
+					<img src="1-1.gif" class="img-fluid"/>
+				</div>
+				
+				<div class="col-12 col-lg-6" style="padding-left:45px;">
+					
+					
+					<h2>
+					<p class="text-left">Light a lamp of love!<br/>
+					Blast a chain of sorrow!<br/>
+					Shoot a rocket of prosperity!<br/>
+					Fire a flowerpot of happiness!<br/><br/>
+					
+					<b><span style="color:#ff0000;">Wish you and your family sparking Diwali!</span></b></p></h2>
+					
+					<div class="text-left">
+					<!-- Button trigger modal -->
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#wishModal">
+					  Wish Your Friend
+					</button>
+					</div>
+				</div>
+				
+				
+				
+			</div>
+		  </div>
+		  <div class="card-footer text-muted" style="background-color:#222211; color:white;">
+			<a href="https://www.github.com/vinodkmr">Built By Vinod</a>
+		  </div>
+		</div>
+
+</div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="wishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Wish Your Friend</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <form>
+			  
+			  <div class="form-group">
+				<label>Wisher's Name</label>
+				<input type="text" class="form-control" placeholder="Wisher's Name">
+			  </div>
+			  
+			  
+			  <div class="form-group">
+				<label>Wishing To</label>
+				<input type="text" class="form-control" placeholder="Wishing To">
+			  </div>
+
+			  <button type="submit" class="btn btn-primary">Generate Link</button>
+			</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+</body>
+</html>
