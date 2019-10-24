@@ -3,6 +3,7 @@
 <title>Happy Diwali! Wish Your Friend Now!!</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="https://vinodkmr.github.io/fireworks.gif">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -23,10 +24,11 @@ function $_GET(param) {
 	return vars;
 }
 
-var from = $_GET('from');
-var  to = $_GET('to');
 
-console.log(from+to);
+var fromAndTo = $_GET('from').split('and');
+var from = fromAndTo[0];
+var to =  fromAndTo[1];
+
 
 $(document).ready(function(){ 
 	$("#fromDisplay").html(from.toUpperCase());
@@ -42,7 +44,7 @@ function generateLink(){
 		return;
 	}
 		
-	var url = 'https://vinodkmr.github.io/diwali_wish.html?from='+$("#from").val()+'&to='+$("#to").val();
+	var url = 'https://vinodkmr.github.io/diwali_wish.html?from='+$("#from").val()+'and'+$("#to").val();
 	$("#url").val(url);
 	console.log("url "+url);
 	$("#share").attr("href","whatsapp://send?text="+encodeURI(url));
