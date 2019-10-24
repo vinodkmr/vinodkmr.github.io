@@ -24,16 +24,18 @@ function $_GET(param) {
 	return vars;
 }
 
-
+if($_GET('from') != null){
 var fromAndTo = $_GET('from').split('and');
 var from = fromAndTo[0];
 var to =  fromAndTo[1];
-
 
 $(document).ready(function(){ 
 	$("#fromDisplay").html(from.toUpperCase());
 	$("#toDisplay").html(to.toUpperCase());
 });
+}
+
+
 
 
 
