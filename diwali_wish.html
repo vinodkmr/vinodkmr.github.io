@@ -22,7 +22,24 @@ function $_GET(param) {
 	return vars;
 }
 
-var name = $_GET('name');
+var from = $_GET('from');
+var  to = $_GET('to');
+
+$("#fromDisplay").val(from);
+$("#toDisplay").val(to);
+
+
+
+function generateLink(){
+	if( $("#from").val().length==0 || $("#from").val().length==0){
+		alert("Please fill in all the fields");
+
+	}
+	var url = 'https://vinodkmr.github.io/diwali_wish.html?from='+$("#from").val()+'&to='+$("#to").val();
+	$("#url").val(url);
+	console.log("url "+url);
+
+}
 </script>
 <style>
 .blinking
@@ -58,8 +75,8 @@ var name = $_GET('name');
  
 		<div class="card text-center">
 			  <div class="card-header" style="background-color:#222211; color:#f5aa42;">
-				<h3 class="blinking">WISHES FROM YOGESH! <br/>
-				HAPPY DIWALI PRAKYATH!</h3>
+				<h3 class="blinking">WISHES FROM <span id="fromDisplay"></span>! <br/>
+				HAPPY DIWALI <span id="toDisplay"></span>!</h3>
 			  </div>
 		  <div class="card-body">
 		  <div class="row">
@@ -81,7 +98,7 @@ var name = $_GET('name');
 					
 					<div class="text-left">
 					<!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#wishModal">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#wishModal" data-backdrop="static" data-keyboard="false">
 					  Wish Your Friend
 					</button>
 					</div>
@@ -117,18 +134,22 @@ var name = $_GET('name');
 			  
 			  <div class="form-group">
 				<label>Wisher's Name</label>
-				<input type="text" class="form-control" placeholder="Wisher's Name">
+				<input type="text" id="from" class="form-control" placeholder="Wisher's Name">
 			  </div>
 			  
 			  
 			  <div class="form-group">
 				<label>Wishing To</label>
-				<input type="text" class="form-control" placeholder="Wishing To">
+				<input type="text" id="to" class="form-control" placeholder="Wishing To">
 			  </div>
 
-			  <button type="submit" class="btn btn-primary">Generate Link</button>
+			  <button type="button" onclick="generateLink()" class="btn btn-primary">Generate Link</button>
 			</form>
       </div>
+	  
+	  <div>
+		<input type="text" id="url" class="form-control">
+	  </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
